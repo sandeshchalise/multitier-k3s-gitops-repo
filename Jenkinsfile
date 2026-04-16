@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = "docker.io/sandeshchalise"   // your Docker Hub namespace
+        REGISTRY = "docker.io/sandeshchalise"   // Docker Hub namespace
         APP_REPO = "https://github.com/sandeshchalise/multitier-k3s-app-repo.git"
         DEPLOY_REPO = "https://github.com/sandeshchalise/multitier-k3s-gitops-repo.git"
     }
@@ -16,7 +16,7 @@ pipeline {
 
         stage('Docker Login') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'fd478bba-2d0e-4e5e-a268-af7839898698', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
                 }
             }
@@ -45,20 +45,22 @@ pipeline {
 
         stage('Update GitOps Repo') {
             steps {
-                sh '''
-                rm -rf deploy-repo
-                git clone $DEPLOY_REPO
-                cd deploy-repo
+                withCredentials([usernamePassword(credentialsId: '0837ae32-3a05-4dbb-856e-c6add3bb67c7', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                    sh '''
+                    rm -rf deploy-repo
+                    git clone https://$GIT_USER:$GIT_PASS@github.com/sandeshchalise/multitier-k3s-gitops-repo.git deploy-repo
+                    cd deploy-repo
 
-                sed -i "s|image: .*/frontend:.*|image: $REGISTRY/frontend:latest|" frontend-deployment.yaml
-                sed -i "s|image: .*/backend:.*|image: $REGISTRY/backend:latest|" backend-deployment.yaml
-                sed -i "s|image: .*/mysql:.*|image: $REGISTRY/mysql:latest|" mysql-deployment.yaml
+                    sed -i "s|image: .*/frontend:.*|image: $REGISTRY/frontend:latest|" frontend-deployment.yaml
+                    sed -i "s|image: .*/backend:.*|image: $REGISTRY/backend:latest|" backend-deployment.yaml
+                    sed -i "s|image: .*/mysql:.*|image: $REGISTRY/mysql:latest|" mysql-deployment.yaml
 
-                git config user.email "jenkins@ci.local"
-                git config user.name "Jenkins CI"
-                git commit -am "Update images to latest build"
-                git push
-                '''
+                    git config user.email "jenkins@ci.local"
+                    git config user.name "Jenkins CI"
+                    git commit -am "Update images to latest build"
+                    git push
+                    '''
+                }
             }
         }
     }
