@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = "docker.io/sandeshchalise"   // replace with your registry
+        REGISTRY = "docker.io/sandeshchalise"   // your Docker Hub namespace
         APP_REPO = "https://github.com/sandeshchalise/multitier-k3s-app-repo.git"
         DEPLOY_REPO = "https://github.com/sandeshchalise/multitier-k3s-gitops-repo.git"
     }
@@ -11,6 +11,14 @@ pipeline {
         stage('Clone Application Repo') {
             steps {
                 sh 'rm -rf app-repo && git clone $APP_REPO app-repo'
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                }
             }
         }
 
@@ -64,3 +72,4 @@ pipeline {
         }
     }
 }
+
