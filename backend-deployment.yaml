@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
-  namespace: default
+  namespace: backend
 spec:
   replicas: 1
   selector:
@@ -18,3 +18,13 @@ spec:
         image: docker.io/sandeshchalise/backend:latest
         ports:
         - containerPort: 3000
+        env:
+        - name: DB_HOST
+          value: mysql.mysql.svc.cluster.local   # <-- points to MySQL Service
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: example
+        - name: DB_NAME
+          value: mydb
+
