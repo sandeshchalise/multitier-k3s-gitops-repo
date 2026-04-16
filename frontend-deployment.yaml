@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: myregistry/frontend:latest
+        image: docker.io/sandeshchalise/frontend:latest
         ports:
         - containerPort: 80

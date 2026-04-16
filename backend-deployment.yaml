@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: backend
-        image: myregistry/backend:latest
+        image: docker.io/sandeshchalise/backend:latest
         ports:
         - containerPort: 3000
