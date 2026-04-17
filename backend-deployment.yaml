@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
-  namespace: default
 spec:
   replicas: 1
   selector:
@@ -20,7 +19,7 @@ spec:
         - containerPort: 3000
         env:
         - name: DB_HOST
-          value: mysql.mysql.svc.cluster.local   # <-- points to MySQL Service
+          value: mysql.mysql.svc.cluster.local   # 👈 important
         - name: DB_USER
           value: root
         - name: DB_PASSWORD
@@ -28,3 +27,15 @@ spec:
         - name: DB_NAME
           value: mydb
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+    - port: 3000
+      targetPort: 3000
