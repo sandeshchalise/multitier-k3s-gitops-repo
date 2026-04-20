@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: docker.io/sandeshchalise/mysql:latest
+        image: docker.io/sandeshchalise/mysql:8
         ports:
         - containerPort: 3306
         env:
