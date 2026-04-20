@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: docker.io/sandeshchalise/frontend:10
+        image: docker.io/sandeshchalise/frontend:11
         ports:
         - containerPort: 5002
         env:

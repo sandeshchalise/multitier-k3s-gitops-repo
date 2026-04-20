@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: docker.io/sandeshchalise/backend:10
+        image: docker.io/sandeshchalise/backend:11
         ports:
         - containerPort: 5001
         env:
