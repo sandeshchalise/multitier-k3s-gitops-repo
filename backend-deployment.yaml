@@ -17,7 +17,7 @@ spec:
       - name: backend
         image: docker.io/sandeshchalise/backend:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 5001
         env:
         - name: DB_HOST
           value: mysql.mysql.svc.cluster.local   # 👈 important
@@ -39,5 +39,5 @@ spec:
   selector:
     app: backend
   ports:
-    - port: 3000
-      targetPort: 3000
+    - port: 5001
+      targetPort: 5001
