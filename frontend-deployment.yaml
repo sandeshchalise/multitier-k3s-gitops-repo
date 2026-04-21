@@ -29,7 +29,7 @@ metadata:
   name: frontend-service
   namespace: default
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: frontend
   ports:
